@@ -25,7 +25,16 @@ describe("arrivals", () => {
   it("changes the list when the seed changes", () => {
     const a = buildArrivals(config({ seed: 1, duration: 120 }));
     const b = buildArrivals(config({ seed: 2, duration: 120 }));
+    expect(a).toHaveLength(b.length);
     expect(a.map((item) => item.time)).not.toEqual(b.map((item) => item.time));
+  });
+
+  it("keeps the car count fixed and bunches the arrivals", () => {
+    const arrivals = buildArrivals(config({ seed: 3, duration: 180, spawnPerHour: 3600 }));
+    const gaps = arrivals.slice(1).map((item, index) => item.time - arrivals[index].time);
+
+    expect(arrivals).toHaveLength(180);
+    expect(Math.max(...gaps) / Math.min(...gaps)).toBeGreaterThan(4);
   });
 });
 

@@ -51,13 +51,13 @@ export function Controls({
         <Slider
           label="차량 생성량"
           min={200}
-          max={5000}
+          max={8000}
           step={50}
           value={draft.spawnPerHour}
           suffix=" 대/시"
           onChange={(spawnPerHour) => set({ spawnPerHour })}
         />
-        <p className="hint">서쪽 끝에서 들어옵니다. 같은 시드면 같은 차가 같은 시각에 도착합니다.</p>
+        <p className="hint">총 대수는 생성량대로입니다. 한 번에 들어오는 무리 크기와 간격만 시드에 따라 달라집니다.</p>
       </Section>
 
       <Section title="도로">

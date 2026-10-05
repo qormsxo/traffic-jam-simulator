@@ -2,7 +2,7 @@ import { clamp } from "../core/vec";
 import type { SimConfig } from "./types";
 
 export const defaultConfig: SimConfig = {
-  spawnPerHour: 4000,
+  spawnPerHour: 5500,
   laneCount: 1,
   maxSpeed: 50,
   safetyDistance: 2,
@@ -27,7 +27,7 @@ export function normalizeConfig(input: SimConfig): SimConfig {
   const duration = clamp(input.duration, 60, 900);
 
   return {
-    spawnPerHour: clamp(Math.round(input.spawnPerHour), 200, 6000),
+    spawnPerHour: clamp(Math.round(input.spawnPerHour), 200, 8000),
     laneCount,
     maxSpeed,
     safetyDistance,

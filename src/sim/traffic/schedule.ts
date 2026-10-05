@@ -13,14 +13,20 @@ export type Arrival = {
   gapFactor: number;
 };
 
-/** 시드와 생성량, 시간만으로 도착 목록을 만듦 모두 서쪽에서 동쪽으로 직진함 */
+/** 총 대수는 생성량과 시간으로 고정함 들어올 때만 무리 크기와 간격을 섞음 */
 export function buildArrivals(config: SimConfig, rng: Rng = mulberry32(config.seed)): Arrival[] {
-  const rate = config.spawnPerHour / 3600;
+  const count = Math.max(1, Math.round((config.spawnPerHour * config.duration) / 3600));
+  const gaps = bunchGaps(rng, count);
+  const span = gaps.reduce((sum, gap) => sum + gap, 0);
+  const scale = (config.duration * 0.97) / Math.max(span, 1e-6);
   const arrivals: Arrival[] = [];
-  let time = exponential(rng, rate);
-  let ordinal = 0;
+  let time = 0;
 
-  while (time < config.duration) {
+  for (let ordinal = 0; ordinal < count; ordinal += 1) {
+    time += gaps[ordinal] * scale;
+
+    if (time >= config.duration) break;
+
     arrivals.push({
       time,
       approach: "eastbound",
@@ -31,8 +37,6 @@ export function buildArrivals(config: SimConfig, rng: Rng = mulberry32(config.se
       brake: 2.5 + rng.next() * 1.8,
       gapFactor: 0.82 + rng.next() * 0.4,
     });
-    ordinal += 1;
-    time += exponential(rng, rate);
   }
 
   return arrivals;
@@ -55,9 +59,22 @@ export function pickLane(movement: Movement, laneCount: number, ordinal: number)
   return lanes[ordinal % lanes.length];
 }
 
-/** 평균 간격이 1/rate인 다음 도착까지 시간을 뽑음 */
-function exponential(rng: Rng, rate: number): number {
-  const u = Math.min(0.999999, Math.max(1e-6, rng.next()));
+/** 한 무리는 바짝 붙이고, 다음 무리 전에 긴 간격을 둠 총 대수는 바꾸지 않음 */
+function bunchGaps(rng: Rng, count: number): number[] {
+  const gaps: number[] = [];
+  let left = count;
 
-  return -Math.log(u) / Math.max(rate, 1e-6);
+  while (left > 0) {
+    const size = Math.min(left, 1 + Math.floor(rng.next() * 5));
+
+    for (let index = 0; index < size; index += 1) {
+      if (gaps.length === 0) gaps.push(0.6 + rng.next() * 1.4);
+      else if (index === 0) gaps.push(3.5 + rng.next() * 9);
+      else gaps.push(0.2 + rng.next() * 0.45);
+    }
+
+    left -= size;
+  }
+
+  return gaps;
 }
