@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "oxlint"
   },
   "dependencies": {
     "@react-three/fiber": "^9.1.2",
@@ -16,10 +17,12 @@
     "three": "^0.178.0"
   },
   "devDependencies": {
+    "@oxlint/plugins": "1.86.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/three": "^0.178.0",
     "@vitejs/plugin-react": "^4.5.2",
+    "oxlint": "1.86.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vitest": "^3.2.4"
