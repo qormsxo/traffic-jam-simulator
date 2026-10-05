@@ -1,23 +1,20 @@
-import type { AgeBand, CustomerState } from "../sim/cafe/types";
+import { clamp } from "../sim/core/vec";
+import type { LightColor } from "../sim/traffic/types";
 
-export const AGE_COLOR: Record<AgeBand, string> = {
-  "10s": "#3d8bfd",
-  "20s": "#2fbf71",
-  "30s": "#e2b43a",
-  "40s": "#ef8a34",
-  "50s": "#e15b3a",
-  "60s": "#d45d9d",
-  "70s": "#8d78d8",
+export const LIGHT_COLOR: Record<LightColor, string> = {
+  red: "#ff4d3a",
+  yellow: "#ffd60a",
+  green: "#3ddc6e",
 };
 
-export const STATE_COLOR: Record<CustomerState, string> = {
-  ENTERING: "#8ec5ff",
-  WAITING_FOR_KIOSK: "#ffb020",
-  USING_KIOSK: "#ffe14a",
-  DECIDING_MENU: "#ff8bd2",
-  PAYING: "#c9a0ff",
-  WAITING_FOR_FOOD: "#5ad7c6",
-  PICKING_UP: "#8be07a",
-  EXITING: "#ece7e1",
-  COMPLETED: "#666666",
-};
+/** 속도 비율로 차 색을 고름. 느리면 빨강, 빠르면 초록임. */
+export function vehicleColor(id: string, speed: number, maxSpeed: number): string {
+  const ratio = clamp(speed / Math.max(maxSpeed, 0.1), 0, 1);
+  const hash = [...id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 3;
+
+  if (ratio < 0.15) return ["#d63b3b", "#e24b4b", "#c43232"][hash];
+
+  if (ratio < 0.48) return ["#e8941a", "#f0a202", "#d98412"][hash];
+
+  return ["#2fce7a", "#3ecf8e", "#27b86c"][hash];
+}
