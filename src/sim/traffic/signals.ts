@@ -15,7 +15,7 @@ const PHASE_LABEL: Record<PhaseId, string> = {
 
 const PHASES: PhaseId[] = ["ew-through", "ew-left", "ns-through", "ns-left"];
 
-/** 한 주기를 직진과 좌회전 네 현시로 나눔. */
+/** 한 주기를 직진과 좌회전 네 현시로 나눔 */
 export function phasePlan(cycle: number): PhaseSlice[] {
   const safe = Math.max(20, cycle);
   const yellow = Math.min(3, safe / 10);
@@ -27,7 +27,7 @@ export function phasePlan(cycle: number): PhaseSlice[] {
   return PHASES.map((id, index) => ({ id, green: greens[index], yellow }));
 }
 
-/** 시각에 해당하는 현시와 등 색을 계산함. */
+/** 시각에 해당하는 현시와 등 색을 계산함 */
 export function signalAt(time: number, cycle: number): SignalView {
   const plan = phasePlan(cycle);
   const total = plan.reduce((sum, phase) => sum + phase.green + phase.yellow, 0);
@@ -49,14 +49,14 @@ export function signalAt(time: number, cycle: number): SignalView {
   return viewFor(plan[0].id, "green", total);
 }
 
-/** 좌회전은 좌회전 등, 직진과 우회전은 직진 등을 봄. */
+/** 좌회전은 좌회전 등, 직진과 우회전은 직진 등을 봄 */
 export function lightFor(signal: SignalView, approach: ApproachId, movement: Movement): LightColor {
   const head = signal[approach];
 
   return movement === "left" ? head.left : head.through;
 }
 
-/** 정지선을 지나기 전이면 빨간불에 멈춤. 노란불은 제동 거리 안에 설 수 있을 때만 멈춤. */
+/** 정지선을 지나기 전이면 빨간불에 멈춤 노란불은 제동 거리 안에 설 수 있을 때만 멈춤 */
 export function shouldStop(color: LightColor, gapToLine: number, speed: number, brake: number): boolean {
   if (gapToLine < -0.35) return false;
 
@@ -68,9 +68,9 @@ export function shouldStop(color: LightColor, gapToLine: number, speed: number, 
   return stoppingDistance <= gapToLine + 0.5;
 }
 
-/** 한 현시의 네 방향 등 상태를 만듦. */
+/** 한 현시의 네 방향 등 상태를 만듦 */
 function viewFor(phase: PhaseId, color: LightColor, cycle: number): SignalView {
-  /** 직진 등과 좌회전 등을 모두 빨간불로 만듦. */
+  /** 직진 등과 좌회전 등을 모두 빨간불로 만듦 */
   const red = (): ApproachLights => ({ through: "red", left: "red" });
 
   const lights: Record<ApproachId, ApproachLights> = {
@@ -80,7 +80,7 @@ function viewFor(phase: PhaseId, color: LightColor, cycle: number): SignalView {
     southbound: red(),
   };
 
-  /** 지정한 방향의 등 하나만 현재 색으로 바꿈. */
+  /** 지정한 방향의 등 하나만 현재 색으로 바꿈 */
   const paint = (approaches: ApproachId[], field: keyof ApproachLights) => {
     for (const approach of approaches) {
       lights[approach] = { ...lights[approach], [field]: color };

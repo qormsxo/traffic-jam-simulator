@@ -51,12 +51,12 @@ export type Network = {
   labels: RoadLabel[];
 };
 
-/** 차선 구간 id를 만듦. 끼어들기는 이 id만 바꿈. */
+/** 차선 구간 id를 만듦 끼어들기는 이 id만 바꿈 */
 export function laneSegmentId(laneIndex: number): string {
   return `lane-${laneIndex}`;
 }
 
-/** 한 방향이라 경로는 그 차선 하나임. 방향과 회전은 경로에 쓰지 않음. */
+/** 한 방향이라 경로는 그 차선 하나임 방향과 회전은 경로에 쓰지 않음 */
 export function buildRoute(approach: ApproachId, laneIndex: number, movement: Movement): string[] {
   void approach;
   void movement;
@@ -64,7 +64,7 @@ export function buildRoute(approach: ApproachId, laneIndex: number, movement: Mo
   return [laneSegmentId(laneIndex)];
 }
 
-/** 서쪽→동쪽 도로를 만듦. 정지선은 없고 끼어들기와 급정거만 줄을 만듦. */
+/** 서쪽→동쪽 도로를 만듦 정지선은 없고 끼어들기와 급정거만 줄을 만듦 */
 export function buildNetwork(laneCount: number): Network {
   const count = Math.max(1, Math.min(4, Math.round(laneCount)));
   const width = count * LANE_WIDTH;
@@ -107,12 +107,12 @@ export function buildNetwork(laneCount: number): Network {
   };
 }
 
-/** 0번 차선이 가장 왼쪽이 되도록 도로 중심에 맞춤. */
+/** 0번 차선이 가장 왼쪽이 되도록 도로 중심에 맞춤 */
 function laneOffset(laneIndex: number, laneCount: number): number {
   return (laneIndex - (laneCount - 1) / 2) * LANE_WIDTH;
 }
 
-/** 도로 포장과 연석 상자를 만듦. */
+/** 도로 포장과 연석 상자를 만듦 */
 function slabs(half: number): Slab[] {
   const asphalt = "#3c434a";
   const curb = "#667068";
@@ -123,7 +123,7 @@ function slabs(half: number): Slab[] {
   ];
 }
 
-/** 가장자리 실선과 차선 사이 점선을 만듦. */
+/** 가장자리 실선과 차선 사이 점선을 만듦 */
 function markings(laneCount: number): Marking[] {
   const half = (laneCount * LANE_WIDTH) / 2;
   const x0 = -ROAD_LENGTH / 2;
@@ -142,12 +142,12 @@ function markings(laneCount: number): Marking[] {
   return lines;
 }
 
-/** 실선 하나를 만듦. */
+/** 실선 하나를 만듦 */
 function solid(from: Vec3, to: Vec3, color: string, width: number): Marking {
   return { from, to, color, width };
 }
 
-/** 점선으로 나눈 선 목록을 만듦. */
+/** 점선으로 나눈 선 목록을 만듦 */
 function dashes(from: Vec3, to: Vec3, color: string, width: number): Marking[] {
   const dx = to.x - from.x;
   const dz = to.z - from.z;

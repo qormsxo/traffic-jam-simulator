@@ -62,8 +62,8 @@ type LaneSlot = {
 };
 
 /**
- * React 없이 돌아가는 교통 시계.
- * step으로 차를 넣고 앞차를 따라가게 함. 급정거는 뒤차까지 느려지게 함.
+ * React 없이 돌아가는 교통 시계
+ * step으로 차를 넣고 앞차를 따라가게 함 급정거는 뒤차까지 느려지게 함
  */
 export class TrafficSimulation {
   private config: SimConfig;
@@ -87,14 +87,14 @@ export class TrafficSimulation {
   private nextAutoBrake = 0;
   private cached: SimSnapshot | null = null;
 
-  /** 설정을 넣고 시뮬레이션을 비움. */
+  /** 설정을 넣고 시뮬레이션을 비움 */
   constructor(config: SimConfig) {
     this.config = normalizeConfig(config);
     this.network = buildNetwork(this.config.laneCount);
     this.reset(config);
   }
 
-  /** 시간과 차량을 처음 상태로 되돌림. 자동 사건은 6초 뒤부터 셈. */
+  /** 시간과 차량을 처음 상태로 되돌림 자동 사건은 6초 뒤부터 셈 */
   reset(config: SimConfig): void {
     this.config = normalizeConfig(config);
     this.network = buildNetwork(this.config.laneCount);
@@ -121,7 +121,7 @@ export class TrafficSimulation {
     this.cached = null;
   }
 
-  /** 지정한 차를 2.8초 동안 급정거시킴. 없으면 실패함. */
+  /** 지정한 차를 2.8초 동안 급정거시킴 없으면 실패함 */
   hardBrake(id: string): boolean {
     const vehicle = this.vehicles.find((item) => item.id === id);
 
@@ -137,7 +137,7 @@ export class TrafficSimulation {
     return true;
   }
 
-  /** 지정한 차를 옆 차선으로 넣음. 간격이 없거나 1차선이면 실패함. */
+  /** 지정한 차를 옆 차선으로 넣음 간격이 없거나 1차선이면 실패함 */
   cutIn(id: string): boolean {
     const vehicle = this.vehicles.find((item) => item.id === id);
 
@@ -152,7 +152,7 @@ export class TrafficSimulation {
     return true;
   }
 
-  /** 뒤차가 있는 주행 차를 우선으로 골라 급정거시킴. 없으면 null을 돌려줌. */
+  /** 뒤차가 있는 주행 차를 우선으로 골라 급정거시킴 없으면 null을 돌려줌 */
   hardBrakeRandom(): string | null {
     const moving = this.vehicles.filter((vehicle) => vehicle.speed > 1.5 && vehicle.brakeUntil <= this.time);
     const withFollower = moving.filter((vehicle) => this.followerNearby(vehicle));
@@ -164,7 +164,7 @@ export class TrafficSimulation {
     return pick.id;
   }
 
-  /** 끼어들 간격이 있는 차 하나를 골라 끼어들게 함. 없으면 null을 돌려줌. */
+  /** 끼어들 간격이 있는 차 하나를 골라 끼어들게 함 없으면 null을 돌려줌 */
   cutInRandom(): string | null {
     const pool = this.shuffled(this.vehicles);
 
@@ -175,7 +175,7 @@ export class TrafficSimulation {
     return null;
   }
 
-  /** 분당 횟수를 도로를 지우지 않고 바꿈. 다시 켜면 6초 뒤부터 셈. */
+  /** 분당 횟수를 도로를 지우지 않고 바꿈 다시 켜면 6초 뒤부터 셈 */
   setIncidentRates(cutInsPerMinute: number, brakesPerMinute: number): void {
     const cut = Math.max(0, cutInsPerMinute);
     const brake = Math.max(0, brakesPerMinute);
@@ -186,7 +186,7 @@ export class TrafficSimulation {
     this.config = { ...this.config, cutInsPerMinute: cut, brakesPerMinute: brake };
   }
 
-  /** 0.1초 단위로 dt만큼 진행함. 시간이 움직였으면 true를 돌려줌. */
+  /** 0.1초 단위로 dt만큼 진행함 시간이 움직였으면 true를 돌려줌 */
   step(dt: number): boolean {
     if (this.time >= this.config.duration) return false;
     let moved = false;
@@ -205,21 +205,21 @@ export class TrafficSimulation {
     return moved;
   }
 
-  /** 화면용 상태를 돌려줌. 바뀌기 전에는 같은 객체를 재사용함. */
+  /** 화면용 상태를 돌려줌 바뀌기 전에는 같은 객체를 재사용함 */
   getSnapshot(): SimSnapshot {
     if (!this.cached) this.cached = this.buildSnapshot();
 
     return this.cached;
   }
 
-  /** 한 서브스텝에서 생성, 주행, 표본을 처리함. */
+  /** 한 서브스텝에서 생성, 주행, 표본을 처리함 */
   private integrate(dt: number): void {
     this.spawnDue();
     this.drive(dt);
     this.sample();
   }
 
-  /** 도착 시각이 된 차를 도로에 넣음. 앞이 막히면 그 방향은 이번 스텝을 건너뜀. */
+  /** 도착 시각이 된 차를 도로에 넣음 앞이 막히면 그 방향은 이번 스텝을 건너뜀 */
   private spawnDue(): void {
     for (const approach of APPROACH_ORDER) {
       const list = this.arrivals[approach];
@@ -234,7 +234,7 @@ export class TrafficSimulation {
     }
   }
 
-  /** 진입점 앞이 비었는지 확인해 새 차를 허용함. */
+  /** 진입점 앞이 비었는지 확인해 새 차를 허용함 */
   private canEnter(arrival: Arrival): boolean {
     const lane = pickLane(arrival.movement, this.network.laneCount, arrival.ordinal);
     const segId = buildRoute(arrival.approach, lane, arrival.movement)[0];
@@ -251,7 +251,7 @@ export class TrafficSimulation {
     return nearest > VEHICLE_LENGTH + minGap + 1.5;
   }
 
-  /** 도착 정보로 차량을 만듦. */
+  /** 도착 정보로 차량을 만듦 */
   private spawn(arrival: Arrival): void {
     const lane = pickLane(arrival.movement, this.network.laneCount, arrival.ordinal);
     const maxSpeed = kmhToMps(this.config.maxSpeed) * arrival.speedFactor;
@@ -288,7 +288,7 @@ export class TrafficSimulation {
     this.vehicles.push(vehicle);
   }
 
-  /** 앞차와 신호를 보고 속도와 위치를 갱신함. */
+  /** 앞차와 신호를 보고 속도와 위치를 갱신함 */
   private drive(dt: number): void {
     this.signal = signalAt(this.time, this.config.signalCycle);
     this.considerIncidents();
@@ -323,7 +323,7 @@ export class TrafficSimulation {
       if (vehicle.brakeUntil > this.time && vehicle.speed < 0.35) vehicle.speed = 0;
       else if (vehicle.speed < 0.05 && accel <= 0) vehicle.speed = 0;
 
-      // 교차로 안에 들어온 차는 서로 막히지 않게 천천히 빠져나감.
+      // 교차로 안에 들어온 차는 서로 막히지 않게 천천히 빠져나감
       if (
         seg.kind === "connector" &&
         vehicle.brakeUntil <= this.time &&
@@ -372,7 +372,7 @@ export class TrafficSimulation {
     this.maxQueue = Math.max(this.maxQueue, this.measureQueue());
   }
 
-  /** IDM으로 가속도를 계산함. */
+  /** IDM으로 가속도를 계산함 */
   private accel(vehicle: SimVehicle, gap: number, leaderSpeed: number, minGap = vehicle.minGap): number {
     return idmAcceleration({
       speed: vehicle.speed,
@@ -385,7 +385,7 @@ export class TrafficSimulation {
     });
   }
 
-  /** 서야 하는 차를 정지선 앞에 붙잡아 둠. */
+  /** 서야 하는 차를 정지선 앞에 붙잡아 둠 */
   private holdAtLine(vehicle: SimVehicle, seg: Segment): void {
     if (seg.kind !== "approach") return;
     const gapToLine = seg.length - vehicle.s;
@@ -400,7 +400,7 @@ export class TrafficSimulation {
     }
   }
 
-  /** 같은 경로의 바로 앞차까지 간격과 속도를 계산함. */
+  /** 같은 경로의 바로 앞차까지 간격과 속도를 계산함 */
   private leaderConstraint(
     vehicle: SimVehicle,
     seg: Segment,
@@ -428,11 +428,11 @@ export class TrafficSimulation {
     };
   }
 
-  /** 진행 방향 앞에 있는 다른 차를 앞차로 봄. 교차로 안에서는 건너뜀. */
+  /** 진행 방향 앞에 있는 다른 차를 앞차로 봄 교차로 안에서는 건너뜀 */
   private conflictConstraint(vehicle: SimVehicle): LeaderGap | null {
     const seg = this.segment(vehicle);
 
-    // 교차로 안에서는 교차 차량끼리 서로 세우지 않음. 같은 차선 앞차는 그대로 따라감.
+    // 교차로 안에서는 교차 차량끼리 서로 세우지 않음 같은 차선 앞차는 그대로 따라감
     if (seg.kind === "connector") return null;
 
     if (seg.kind === "depart" && vehicle.s > 10) return null;
@@ -461,7 +461,7 @@ export class TrafficSimulation {
     return best;
   }
 
-  /** 구간 끝을 지나면 다음 구간으로 넘김. */
+  /** 구간 끝을 지나면 다음 구간으로 넘김 */
   private advance(vehicle: SimVehicle): void {
     for (let guard = 0; guard < 4 && vehicle.routeIndex < vehicle.route.length - 1; guard += 1) {
       const seg = this.segment(vehicle);
@@ -472,7 +472,7 @@ export class TrafficSimulation {
     }
   }
 
-  /** 같은 차선에서 범퍼가 겹치면 뒷차를 뒤로 당김. */
+  /** 같은 차선에서 범퍼가 겹치면 뒷차를 뒤로 당김 */
   private separate(): void {
     for (const list of this.buckets().values()) {
       for (let i = list.length - 1; i > 0; i -= 1) {
@@ -488,7 +488,7 @@ export class TrafficSimulation {
     }
   }
 
-  /** 분당 횟수에 맞춰 끼어들기와 급정거를 자동으로 시킴. 0이면 버튼만 동작함. */
+  /** 분당 횟수에 맞춰 끼어들기와 급정거를 자동으로 시킴 0이면 버튼만 동작함 */
   private considerIncidents(): void {
     if (this.config.cutInsPerMinute > 0 && this.time >= this.nextAutoCut) {
       this.cutInRandom();
@@ -501,7 +501,7 @@ export class TrafficSimulation {
     }
   }
 
-  /** 끼어들 옆 차선을 고름. 수동이면 빈 차선도 허용함. */
+  /** 끼어들 옆 차선을 고름 수동이면 빈 차선도 허용함 */
   private pickCutLane(vehicle: SimVehicle, manual: boolean): number | null {
     const seg = this.segment(vehicle);
 
@@ -530,7 +530,7 @@ export class TrafficSimulation {
     return best?.lane ?? null;
   }
 
-  /** 그 위치의 앞뒤 범퍼 간격을 계산함. 차가 없으면 40m로 봄. */
+  /** 그 위치의 앞뒤 범퍼 간격을 계산함 차가 없으면 40m로 봄 */
   private slot(segmentId: string, s: number, selfId: string): LaneSlot {
     let ahead = Number.POSITIVE_INFINITY;
     let behind = Number.POSITIVE_INFINITY;
@@ -549,14 +549,14 @@ export class TrafficSimulation {
     };
   }
 
-  /** 옆 차선 구간을 찾음. 교차로 연결 구간에서는 끼어들지 않음. */
+  /** 옆 차선 구간을 찾음 교차로 연결 구간에서는 끼어들지 않음 */
   private neighborSegment(current: Segment, lane: number): Segment | undefined {
     if (current.kind === "connector") return undefined;
 
     return this.network.segments.get(laneSegmentId(lane));
   }
 
-  /** 경로를 옆 차선으로 바꾸고 1.6초에 걸쳐 옆으로 옮김. */
+  /** 경로를 옆 차선으로 바꾸고 1.6초에 걸쳐 옆으로 옮김 */
   private beginCut(vehicle: SimVehicle, lane: number): void {
     const current = this.segment(vehicle);
     const next = this.neighborSegment(current, lane);
@@ -579,7 +579,7 @@ export class TrafficSimulation {
     this.cached = null;
   }
 
-  /** 같은 차선 40m 안에 뒤차가 있는지 확인함. */
+  /** 같은 차선 40m 안에 뒤차가 있는지 확인함 */
   private followerNearby(vehicle: SimVehicle): boolean {
     const seg = vehicle.route[vehicle.routeIndex];
 
@@ -592,14 +592,14 @@ export class TrafficSimulation {
     );
   }
 
-  /** 목록에서 시드 난수로 하나를 고름. */
+  /** 목록에서 시드 난수로 하나를 고름 */
   private pickRandom<T>(items: T[]): T | null {
     if (items.length === 0) return null;
 
     return items[Math.floor(this.behaviorRng.next() * items.length)] ?? null;
   }
 
-  /** 같은 시드면 같은 순서가 되도록 섞음. */
+  /** 같은 시드면 같은 순서가 되도록 섞음 */
   private shuffled<T>(items: T[]): T[] {
     const copy = [...items];
 
@@ -613,14 +613,14 @@ export class TrafficSimulation {
     return copy;
   }
 
-  /** 최근 사건 12개만 남김. */
+  /** 최근 사건 12개만 남김 */
   private log(text: string): void {
     this.events.push({ t: this.time, text });
 
     if (this.events.length > 12) this.events.shift();
   }
 
-  /** 거리 s를 좌표와 방향으로 바꿈. 끼어드는 중이면 옆으로 섞음. */
+  /** 거리 s를 좌표와 방향으로 바꿈 끼어드는 중이면 옆으로 섞음 */
   private syncPose(vehicle: SimVehicle): void {
     const seg = this.segment(vehicle);
     const along = Math.min(Math.max(0, vehicle.s), seg.length);
@@ -647,7 +647,7 @@ export class TrafficSimulation {
     vehicle.laneId = `${seg.approach}-${seg.laneIndex}`;
   }
 
-  /** 속도와 동작으로 표시 상태를 정함. */
+  /** 속도와 동작으로 표시 상태를 정함 */
   private syncState(vehicle: SimVehicle, seg: Segment): void {
     if (vehicle.brakeUntil > this.time) vehicle.state = "BRAKING";
     else if (vehicle.shift > 0.02) vehicle.state = "CUTTING_IN";
@@ -659,7 +659,7 @@ export class TrafficSimulation {
     else vehicle.state = "DRIVING";
   }
 
-  /** 느린 차가 이어진 줄의 길이를 잼. */
+  /** 느린 차가 이어진 줄의 길이를 잼 */
   private measureQueue(): number {
     let best = 0;
 
@@ -680,7 +680,7 @@ export class TrafficSimulation {
     return best;
   }
 
-  /** 같은 구간 차를 앞뒤 순으로 묶음. */
+  /** 같은 구간 차를 앞뒤 순으로 묶음 */
   private buckets(): Map<string, SimVehicle[]> {
     const map = new Map<string, SimVehicle[]>();
 
@@ -699,7 +699,7 @@ export class TrafficSimulation {
     return map;
   }
 
-  /** 차가 있는 도로 구간을 찾음. 없으면 예외를 던짐. */
+  /** 차가 있는 도로 구간을 찾음 없으면 예외를 던짐 */
   private segment(vehicle: SimVehicle): Segment {
     const id = vehicle.route[vehicle.routeIndex];
     const seg = this.network.segments.get(id);
@@ -709,7 +709,7 @@ export class TrafficSimulation {
     return seg;
   }
 
-  /** 1초마다 속도 표본을 남김. */
+  /** 1초마다 속도 표본을 남김 */
   private sample(): void {
     const sec = Math.floor(this.time);
 
@@ -720,7 +720,7 @@ export class TrafficSimulation {
     }
   }
 
-  /** 차선별 차량 수를 만듦. */
+  /** 차선별 차량 수를 만듦 */
   private laneRows(): LaneCount[] {
     const counts = new Map<string, number>();
 
@@ -740,7 +740,7 @@ export class TrafficSimulation {
     return rows;
   }
 
-  /** 방향별 차량 수를 만듦. */
+  /** 방향별 차량 수를 만듦 */
   private approachRows(): LaneCount[] {
     const counts = new Map<ApproachId, number>();
 
@@ -757,7 +757,7 @@ export class TrafficSimulation {
     }));
   }
 
-  /** 내부 차를 화면용 차로 바꿈. */
+  /** 내부 차를 화면용 차로 바꿈 */
   private toVehicle(vehicle: SimVehicle): Vehicle {
     return {
       id: vehicle.id,
@@ -777,7 +777,7 @@ export class TrafficSimulation {
     };
   }
 
-  /** 현재 시각의 전체 상태를 만듦. */
+  /** 현재 시각의 전체 상태를 만듦 */
   private buildSnapshot(): SimSnapshot {
     const vehicles = this.vehicles.map((vehicle) => this.toVehicle(vehicle));
     const currentQueue = this.measureQueue();
@@ -807,7 +807,7 @@ export class TrafficSimulation {
   }
 }
 
-/** 끝날 때까지 돌려 마지막 상태를 돌려줌. */
+/** 끝날 때까지 돌려 마지막 상태를 돌려줌 */
 export function runSimulation(config: SimConfig, dt = 0.25): SimSnapshot {
   const sim = new TrafficSimulation(config);
   const guard = Math.ceil(config.duration / dt) + 8;
@@ -819,12 +819,12 @@ export function runSimulation(config: SimConfig, dt = 0.25): SimSnapshot {
   return sim.getSnapshot();
 }
 
-/** 네 방향의 빈 도착 목록을 만듦. */
+/** 네 방향의 빈 도착 목록을 만듦 */
 function emptyArrivals(): Record<ApproachId, Arrival[]> {
   return { eastbound: [], westbound: [], northbound: [], southbound: [] };
 }
 
-/** 네 방향의 도착 커서를 0으로 만듦. */
+/** 네 방향의 도착 커서를 0으로 만듦 */
 function emptyCursor(): Record<ApproachId, number> {
   return { eastbound: 0, westbound: 0, northbound: 0, southbound: 0 };
 }

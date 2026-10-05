@@ -13,7 +13,7 @@ export type Arrival = {
   gapFactor: number;
 };
 
-/** 시드와 생성량, 시간만으로 도착 목록을 만듦. 모두 서쪽에서 동쪽으로 직진함. */
+/** 시드와 생성량, 시간만으로 도착 목록을 만듦 모두 서쪽에서 동쪽으로 직진함 */
 export function buildArrivals(config: SimConfig, rng: Rng = mulberry32(config.seed)): Arrival[] {
   const rate = config.spawnPerHour / 3600;
   const arrivals: Arrival[] = [];
@@ -38,7 +38,7 @@ export function buildArrivals(config: SimConfig, rng: Rng = mulberry32(config.se
   return arrivals;
 }
 
-/** 한 방향 도로라 모든 차선을 직진 차선으로 돌려줌. */
+/** 한 방향 도로라 모든 차선을 직진 차선으로 돌려줌 */
 export function lanesForMovement(_movement: Movement, laneCount: number): number[] {
   const count = Math.max(1, Math.round(laneCount));
   const lanes: number[] = [];
@@ -48,14 +48,14 @@ export function lanesForMovement(_movement: Movement, laneCount: number): number
   return lanes;
 }
 
-/** 도착 순서로 차선을 나눠 배정함. */
+/** 도착 순서로 차선을 나눠 배정함 */
 export function pickLane(movement: Movement, laneCount: number, ordinal: number): number {
   const lanes = lanesForMovement(movement, laneCount);
 
   return lanes[ordinal % lanes.length];
 }
 
-/** 평균 간격이 1/rate인 다음 도착까지 시간을 뽑음. */
+/** 평균 간격이 1/rate인 다음 도착까지 시간을 뽑음 */
 function exponential(rng: Rng, rate: number): number {
   const u = Math.min(0.999999, Math.max(1e-6, rng.next()));
 

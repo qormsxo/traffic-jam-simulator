@@ -1,13 +1,13 @@
 import type { FlowSample, LaneCount, Stats, Vehicle } from "./types";
 
-/** 평균을 계산함. 값이 없으면 null을 돌려줌. */
+/** 평균을 계산함 값이 없으면 null을 돌려줌 */
 function mean(values: number[]): number | null {
   if (values.length === 0) return null;
 
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
-/** 현재 차량과 완료 기록으로 통계를 만듦. */
+/** 현재 차량과 완료 기록으로 통계를 만듦 */
 export function computeStats(input: {
   time: number;
   vehicles: Vehicle[];
@@ -40,7 +40,7 @@ export function computeStats(input: {
   };
 }
 
-/** 그 시각의 차량 수와 평균 속도를 한 점으로 만듦. */
+/** 그 시각의 차량 수와 평균 속도를 한 점으로 만듦 */
 export function flowSample(time: number, vehicles: Vehicle[]): FlowSample {
   const avgSpeed = vehicles.length
     ? vehicles.reduce((sum, vehicle) => sum + vehicle.speed, 0) / vehicles.length

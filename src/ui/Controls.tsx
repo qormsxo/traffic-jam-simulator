@@ -18,7 +18,7 @@ type Props = {
 
 const SPEEDS = [1, 2, 4, 8, 16];
 
-/** 왼쪽 조작 패널을 보여 줌. */
+/** 왼쪽 조작 패널을 보여 줌 */
 export function Controls({
   draft,
   dirty,
@@ -33,7 +33,7 @@ export function Controls({
   onRandomCut,
   notice,
 }: Props) {
-  /** 초안 설정 일부만 바꿈. */
+  /** 초안 설정 일부만 바꿈 */
   const set = (patch: Partial<SimConfig>) => onChange({ ...draft, ...patch });
 
   return (
@@ -146,7 +146,7 @@ export function Controls({
   );
 }
 
-/** 패널 안의 소제목 묶음을 보여 줌. */
+/** 패널 안의 소제목 묶음을 보여 줌 */
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="block">
@@ -156,7 +156,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** 숫자 슬라이더 하나를 보여 줌. */
+/** 숫자 슬라이더 하나를 보여 줌 */
 function Slider({
   label,
   min,

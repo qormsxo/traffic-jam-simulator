@@ -7,7 +7,7 @@ export const LIGHT_COLOR: Record<LightColor, string> = {
   green: "#3ddc6e",
 };
 
-/** 속도 비율로 차 색을 고름. 느리면 빨강, 빠르면 초록임. */
+/** 속도 비율로 차 색을 고름 느리면 빨강, 빠르면 초록임 */
 export function vehicleColor(id: string, speed: number, maxSpeed: number): string {
   const ratio = clamp(speed / Math.max(maxSpeed, 0.1), 0, 1);
   const hash = [...id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 3;

@@ -6,7 +6,7 @@ export type Polyline = {
   length: number;
 };
 
-/** 너무 가까운 점을 빼고 거리 누적표를 만듦. */
+/** 너무 가까운 점을 빼고 거리 누적표를 만듦 */
 export function makePolyline(points: Vec3[]): Polyline {
   const clean: Vec3[] = [];
 
@@ -35,7 +35,7 @@ type PolylineSample = {
   heading: number;
 };
 
-/** 경로 위 거리 s의 위치와 진행 방향을 계산함. */
+/** 경로 위 거리 s의 위치와 진행 방향을 계산함 */
 export function samplePolyline(path: Polyline, s: number): PolylineSample {
   const dist = clamp(s, 0, path.length);
   let index = 1;
@@ -54,7 +54,7 @@ export function samplePolyline(path: Polyline, s: number): PolylineSample {
   };
 }
 
-/** 베지어 곡선을 점 목록으로 나눔. */
+/** 베지어 곡선을 점 목록으로 나눔 */
 export function cubicBezier(p0: Vec3, c1: Vec3, c2: Vec3, p1: Vec3, steps = 12): Vec3[] {
   const points: Vec3[] = [];
 

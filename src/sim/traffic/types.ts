@@ -17,7 +17,7 @@ export type VehicleState =
   | "BRAKING"
   | "COMPLETED";
 
-/** 화면 속도는 km/h. 엔진에서 m/s로 바꿈. */
+/** 화면 속도는 km/h 엔진에서 m/s로 바꿈 */
 export type SimConfig = {
   spawnPerHour: number;
   laneCount: number;
@@ -26,9 +26,9 @@ export type SimConfig = {
   signalCycle: number;
   duration: number;
   seed: number;
-  /** 자동 끼어들기 횟수. 0이면 버튼으로만 함. */
+  /** 자동 끼어들기 횟수 0이면 버튼으로만 함 */
   cutInsPerMinute: number;
-  /** 자동 급브레이크 횟수. 0이면 버튼으로만 함. */
+  /** 자동 급브레이크 횟수 0이면 버튼으로만 함 */
   brakesPerMinute: number;
 };
 
@@ -138,7 +138,7 @@ export const APPROACH_LABEL: Record<ApproachId, string> = {
   southbound: "북→남",
 };
 
-/** 방향과 차선 번호를 화면 문구로 만듦. */
+/** 방향과 차선 번호를 화면 문구로 만듦 */
 export function laneLabel(approach: ApproachId, laneIndex: number): string {
   return `${APPROACH_LABEL[approach]} ${laneIndex + 1}차로`;
 }

@@ -21,12 +21,12 @@ type Props = {
   onSelect: (id: string | null) => void;
 };
 
-/** 선택 차량의 상태와 속도를 한 줄로 만듦. */
+/** 선택 차량의 상태와 속도를 한 줄로 만듦 */
 export function vehicleHeadline(vehicle: Vehicle): string {
   return `${STATE_LABEL[vehicle.state]} · ${(vehicle.speed * 3.6).toFixed(0)} km/h`;
 }
 
-/** 도로와 차를 3D로 보여 줌. */
+/** 도로와 차를 3D로 보여 줌 */
 export function TrafficScene({ snapshot, selectedId, onSelect }: Props) {
   const network = useMemo(() => buildNetwork(snapshot.laneCount), [snapshot.laneCount]);
 
@@ -55,7 +55,7 @@ export function TrafficScene({ snapshot, selectedId, onSelect }: Props) {
   );
 }
 
-/** 드래그로 돌리고 휠로 줌하는 카메라를 붙임. */
+/** 드래그로 돌리고 휠로 줌하는 카메라를 붙임 */
 function CameraRig({ span }: { span: number }) {
   const { camera, gl } = useThree();
 
@@ -63,7 +63,7 @@ function CameraRig({ span }: { span: number }) {
     dragging: false,
     x: 0,
     y: 0,
-    // 긴 직진 도로의 차선이 보이도록 위에서 비스듬히 봄.
+    // 긴 직진 도로의 차선이 보이도록 위에서 비스듬히 봄
     theta: 0.2,
     phi: 0.62,
     radius: Math.min(150, Math.max(88, span * 0.7)),
@@ -72,7 +72,7 @@ function CameraRig({ span }: { span: number }) {
   useEffect(() => {
     const el = gl.domElement;
 
-    /** 왼쪽 버튼을 누르면 드래그를 시작함. */
+    /** 왼쪽 버튼을 누르면 드래그를 시작함 */
     const onDown = (event: PointerEvent) => {
       if (event.button !== 0) return;
       rig.current.dragging = true;
@@ -80,12 +80,12 @@ function CameraRig({ span }: { span: number }) {
       rig.current.y = event.clientY;
     };
 
-    /** 버튼을 놓으면 드래그를 끝냄. */
+    /** 버튼을 놓으면 드래그를 끝냄 */
     const onUp = () => {
       rig.current.dragging = false;
     };
 
-    /** 드래그 중이면 카메라 각도를 바꿈. */
+    /** 드래그 중이면 카메라 각도를 바꿈 */
     const onMove = (event: PointerEvent) => {
       if (!rig.current.dragging) return;
       const dx = event.clientX - rig.current.x;
@@ -96,7 +96,7 @@ function CameraRig({ span }: { span: number }) {
       rig.current.phi = Math.min(1.28, Math.max(0.35, rig.current.phi + dy * 0.0035));
     };
 
-    /** 휠로 카메라 거리를 바꿈. */
+    /** 휠로 카메라 거리를 바꿈 */
     const onWheel = (event: WheelEvent) => {
       event.preventDefault();
       rig.current.radius = Math.min(360, Math.max(42, rig.current.radius + event.deltaY * 0.045));
@@ -128,7 +128,7 @@ function CameraRig({ span }: { span: number }) {
   return null;
 }
 
-/** 포장, 차선, 도로 글자를 보여 줌. */
+/** 포장, 차선, 도로 글자를 보여 줌 */
 function Roads({ network }: { network: Network }) {
   return (
     <group>
@@ -148,7 +148,7 @@ function Roads({ network }: { network: Network }) {
   );
 }
 
-/** 차선 표시 하나를 바닥에 놓음. */
+/** 차선 표시 하나를 바닥에 놓음 */
 function Stripe({ marking }: { marking: Marking }) {
   const dx = marking.to.x - marking.from.x;
   const dz = marking.to.z - marking.from.z;
@@ -167,7 +167,7 @@ function Stripe({ marking }: { marking: Marking }) {
   );
 }
 
-/** 도로 위 글자 텍스처를 만듦. */
+/** 도로 위 글자 텍스처를 만듦 */
 function RoadLabel({ text, position }: { text: string; position: [number, number, number] }) {
   const texture = useMemo(() => {
     const canvas = document.createElement("canvas");
@@ -201,7 +201,7 @@ function RoadLabel({ text, position }: { text: string; position: [number, number
   );
 }
 
-/** 신호 기둥과 등을 보여 줌. */
+/** 신호 기둥과 등을 보여 줌 */
 function Signals({ network, signal }: { network: Network; signal: SignalView }) {
   return (
     <group>
@@ -227,7 +227,7 @@ function Signals({ network, signal }: { network: Network; signal: SignalView }) 
   );
 }
 
-/** 신호등 전구 하나를 보여 줌. */
+/** 신호등 전구 하나를 보여 줌 */
 function Lamp({
   position,
   color,
@@ -245,7 +245,7 @@ function Lamp({
   );
 }
 
-/** 차 한 대를 보여 줌. 클릭하면 설명창을 열어 줌. */
+/** 차 한 대를 보여 줌 클릭하면 설명창을 열어 줌 */
 function Car({
   vehicle,
   selected,
@@ -321,7 +321,7 @@ function Car({
   );
 }
 
-/** 차선 id의 앞부분이 방향이면 그 방향을 돌려줌. */
+/** 차선 id의 앞부분이 방향이면 그 방향을 돌려줌 */
 function approachOf(value: string | undefined): ApproachId | null {
   if (value === undefined) return null;
 
@@ -332,7 +332,7 @@ function approachOf(value: string | undefined): ApproachId | null {
   return null;
 }
 
-/** 설명창에 넣을 항목 목록을 만듦. */
+/** 설명창에 넣을 항목 목록을 만듦 */
 export function vehicleDetail(vehicle: Vehicle): { label: string; value: string }[] {
   const [road, indexText] = vehicle.laneId.split("-");
   const approach = approachOf(road);

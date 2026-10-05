@@ -6,7 +6,7 @@ import { TrafficScene, vehicleDetail, vehicleHeadline } from "./render/TrafficSc
 import { Controls } from "./ui/Controls";
 import { formatClock } from "./ui/format";
 
-/** 도로 화면과 조작 패널을 붙임. */
+/** 도로 화면과 조작 패널을 붙임 */
 export function App() {
   const [draft, setDraft] = useState<SimConfig>(defaultConfig);
   const [applied, setApplied] = useState<SimConfig>(defaultConfig);
@@ -33,7 +33,7 @@ export function App() {
   const dirty = useMemo(() => {
     const left = normalizeConfig(draft);
     const right = normalizeConfig(applied);
-    // 분당 횟수는 바로 적용되므로 다시 시작 경고에서 뺌.
+    // 분당 횟수는 바로 적용되므로 다시 시작 경고에서 뺌
     left.cutInsPerMinute = 0;
     left.brakesPerMinute = 0;
     right.cutInsPerMinute = 0;
@@ -44,14 +44,14 @@ export function App() {
 
   const selected = snap?.vehicles.find((vehicle) => vehicle.id === selectedId) ?? null;
 
-  /** 초안 설정으로 시뮬레이션을 처음부터 다시 시작함. */
+  /** 초안 설정으로 시뮬레이션을 처음부터 다시 시작함 */
   const restart = () => {
     setApplied(normalizeConfig(draft));
     setRunId((value) => value + 1);
     setRunning(true);
   };
 
-  /** 차 하나를 골라 급정거나 끼어들기를 시킴. 설명창은 열지 않음. */
+  /** 차 하나를 골라 급정거나 끼어들기를 시킴 설명창은 열지 않음 */
   const triggerRandom = (kind: "brake" | "cut") => {
     if (kind === "cut" && (snap?.laneCount ?? 1) < 2) {
       setNotice("2차로 이상이어야 끼어들 수 있습니다.");
@@ -130,7 +130,7 @@ export function App() {
   );
 }
 
-/** 속도 색 범례를 보여 줌. */
+/** 속도 색 범례를 보여 줌 */
 function Legend() {
   const speeds = [
     ["주행", "#3ecf8e"],

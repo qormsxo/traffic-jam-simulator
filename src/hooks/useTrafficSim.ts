@@ -3,7 +3,7 @@ import { TrafficSimulation } from "../sim/traffic/engine";
 import { normalizeConfig } from "../sim/traffic/presets";
 import type { SimConfig, SimSnapshot } from "../sim/traffic/types";
 
-/** 애니메이션 프레임마다 시뮬레이션을 진행하고 화면 상태를 갱신함. */
+/** 애니메이션 프레임마다 시뮬레이션을 진행하고 화면 상태를 갱신함 */
 export function useTrafficSim(
   config: SimConfig,
   speed: number,
@@ -31,7 +31,7 @@ export function useTrafficSim(
     let frame = 0;
     let last = performance.now();
 
-    /** 프레임마다 경과 시간만큼 시뮬레이션을 진행함. */
+    /** 프레임마다 경과 시간만큼 시뮬레이션을 진행함 */
     const loop = (now: number) => {
       frame = requestAnimationFrame(loop);
       const current = simRef.current;
@@ -55,12 +55,12 @@ export function useTrafficSim(
     return () => cancelAnimationFrame(frame);
   }, [configKey, runId, config]);
 
-  // 분당 횟수만 바꿀 때는 도로를 다시 만들지 않음.
+  // 분당 횟수만 바꿀 때는 도로를 다시 만들지 않음
   useEffect(() => {
     simRef.current?.setIncidentRates(cutInsPerMinute, brakesPerMinute);
   }, [cutInsPerMinute, brakesPerMinute]);
 
-  /** 지정한 초만큼 시뮬레이션을 한 번에 진행함. */
+  /** 지정한 초만큼 시뮬레이션을 한 번에 진행함 */
   const skip = useCallback((seconds: number) => {
     const sim = simRef.current;
 
@@ -69,7 +69,7 @@ export function useTrafficSim(
     if (sim.step(seconds)) setSnap(sim.getSnapshot());
   }, []);
 
-  /** 엔진 조작 뒤 화면 상태를 다시 읽음. */
+  /** 엔진 조작 뒤 화면 상태를 다시 읽음 */
   const refresh = useCallback((apply: (sim: TrafficSimulation) => boolean) => {
     const sim = simRef.current;
 
@@ -80,12 +80,12 @@ export function useTrafficSim(
     return ok;
   }, []);
 
-  /** 지정한 차를 급정거시킴. */
+  /** 지정한 차를 급정거시킴 */
   const hardBrake = useCallback((id: string) => refresh((sim) => sim.hardBrake(id)), [refresh]);
-  /** 지정한 차를 옆 차선으로 넣음. */
+  /** 지정한 차를 옆 차선으로 넣음 */
   const cutIn = useCallback((id: string) => refresh((sim) => sim.cutIn(id)), [refresh]);
 
-  /** 엔진이 고른 차 id를 돌려줌. 설명창은 열지 않음. */
+  /** 엔진이 고른 차 id를 돌려줌 설명창은 열지 않음 */
   const pick = useCallback((apply: (sim: TrafficSimulation) => string | null) => {
     const sim = simRef.current;
 
@@ -96,9 +96,9 @@ export function useTrafficSim(
     return id;
   }, []);
 
-  /** 도로 위 차 하나를 골라 급정거시킴. */
+  /** 도로 위 차 하나를 골라 급정거시킴 */
   const hardBrakeRandom = useCallback(() => pick((sim) => sim.hardBrakeRandom()), [pick]);
-  /** 도로 위 차 하나를 골라 끼어들게 함. */
+  /** 도로 위 차 하나를 골라 끼어들게 함 */
   const cutInRandom = useCallback(() => pick((sim) => sim.cutInRandom()), [pick]);
 
   return { snap, skip, hardBrake, cutIn, hardBrakeRandom, cutInRandom };

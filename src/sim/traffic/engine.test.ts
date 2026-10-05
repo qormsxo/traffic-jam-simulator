@@ -9,7 +9,7 @@ import { buildArrivals, pickLane } from "./schedule";
 import { phasePlan, shouldStop, signalAt } from "./signals";
 import type { SimConfig } from "./types";
 
-/** 기본 설정에 테스트용 값만 덮어씀. */
+/** 기본 설정에 테스트용 값만 덮어씀 */
 function config(patch: Partial<SimConfig> = {}): SimConfig {
   return normalizeConfig({ ...defaultConfig, ...patch });
 }
@@ -212,7 +212,7 @@ describe("shockwave", () => {
 
     expect(stillThere.length).toBeGreaterThan(0);
 
-    /** 같은 차들의 속도를 더함. */
+    /** 같은 차들의 속도를 더함 */
     const sum = (sim: TrafficSimulation) =>
       stillThere.reduce((total, id) => total + (sim.getSnapshot().vehicles.find((vehicle) => vehicle.id === id)?.speed ?? 0), 0);
 

@@ -13,12 +13,12 @@ export const defaultConfig: SimConfig = {
   brakesPerMinute: 2,
 };
 
-/** km/h를 m/s로 바꿈. */
+/** km/h를 m/s로 바꿈 */
 export function kmhToMps(kmh: number): number {
   return kmh / 3.6;
 }
 
-/** 설정을 허용 범위 안으로 자름. */
+/** 설정을 허용 범위 안으로 자름 */
 export function normalizeConfig(input: SimConfig): SimConfig {
   const laneCount = clamp(Math.round(input.laneCount), 1, 4);
   const maxSpeed = clamp(input.maxSpeed, 20, 80);

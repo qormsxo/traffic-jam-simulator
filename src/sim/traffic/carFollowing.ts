@@ -2,7 +2,7 @@ import { clamp } from "../core/vec";
 
 export const TIME_HEADWAY = 1.15;
 
-/** 앞차와의 간격으로 가속도를 계산함. 앞차가 없으면 희망 속도까지 가속함. */
+/** 앞차와의 간격으로 가속도를 계산함 앞차가 없으면 희망 속도까지 가속함 */
 export function idmAcceleration(input: {
   speed: number;
   desiredSpeed: number;
